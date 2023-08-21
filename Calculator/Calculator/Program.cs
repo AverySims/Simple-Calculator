@@ -21,11 +21,17 @@
 
 				operationSymbolArray = stringOperator.Split(" ");
 			}
-			
+
 			Console.WriteLine("Number B:");
 			double.TryParse(Console.ReadLine(), out valueB);
 
-			switch (operationSymbolArray[0])
+			PrintEquation(operationSymbolArray[0]);
+
+		}
+
+		private static void PrintEquation(string val)
+		{
+			switch (val)
 			{
 				case "+": // add
 					Console.WriteLine(SimpleAdd(valueA, valueB));
@@ -81,13 +87,14 @@
 		{
 			// divide by 0 safe-guard
 			if (a == 0 || b == 0)
-			{
 				return 0;
-			}
-
-			return a / b;
+			else
+				return a / b;
 		}
 		#endregion
 
 	}
 }
+
+
+
