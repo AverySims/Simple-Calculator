@@ -22,39 +22,27 @@
 				double.TryParse(Console.ReadLine(), out valueA);
 
 				Console.WriteLine("Operation: + - * /");
-
-				loopOperaterSelector = true;
-				while (loopOperaterSelector)
-				{
-					bool operatorSymbolValid = false;
-					// getting the first index in the split string from the console line,
-					// entries are determined by seperation via spaces
-					selectedOperator = Console.ReadLine().Split(" ")[0];
-					foreach (string op in validOperators)
-					{
-						if (selectedOperator == op)
-						{
-							operatorSymbolValid = true;
-							loopOperaterSelector = false;
-							// breaking out of the loop if we have a matching operator
-							break;
-						}
-					}
-
-					if (operatorSymbolValid) // == true
-						break;
-					else
-						PrintInvalidOperator();
-
-				}
+				
+				// selecting + - * /
+				SelectOperator();
 
 				Console.WriteLine("Number B:");
 				double.TryParse(Console.ReadLine(), out valueB);
 
+				PrintBlank(); // empty line before
+				
 				PrintEquation(selectedOperator);
+				
+				PrintBlank(); // empty line after
 
 				SelectEndingPath();
 			}
+		}
+
+		#region Formatting
+		public static string FormatEquation(double a, double b, string operation, double result)
+		{
+			return $"{a} {operation} {b} = {result}";
 		}
 
 		private static void PrintEquation(string val)
@@ -78,21 +66,73 @@
 					break;
 
 				default: // invalid symbols
-					PrintInvalidOperator();
-					break;
-				/*
-				case "x": // multiply
-					Console.WriteLine(SimpleMultiply(valueA, valueB));
+					PrintInvalidSelection();
 					break;
 
-				case "X": // multiply
-					Console.WriteLine(SimpleMultiply(valueA, valueB));
-					break;
+			}
+		}
 
-				case "÷": // divide
-					Console.WriteLine(SimpleDivide(valueA, valueB));
+		#endregion
+
+		#region Parsing
+		// EC = Error correction
+		private static bool ParseIntEC(out int val)
+		{
+			return int.TryParse(Console.ReadLine(), out val);
+		}
+		#endregion
+
+		#region Operations
+		public static double SimpleAdd(double a, double b)
+		{
+			return a + b;
+		}
+
+		public static double SimpleSubtract(double a, double b)
+		{
+			return a - b;
+		}
+
+		public static double SimpleMultiply(double a, double b)
+		{
+			return a * b;
+		}
+
+		public static double SimpleDivide(double a, double b)
+		{
+			// divide by 0 safe-guard
+			if (a == 0 || b == 0)
+				return 0;
+			else
+				return a / b;
+		}
+		#endregion
+
+		private static void SelectOperator()
+		{
+			loopOperaterSelector = true;
+			while (loopOperaterSelector)
+			{
+				bool operatorSymbolValid = false;
+				// getting the first index in the split string from the console line,
+				// entries are determined by seperation via spaces
+				selectedOperator = Console.ReadLine().Split(" ")[0];
+				foreach (string op in validOperators)
+				{
+					if (selectedOperator == op)
+					{
+						operatorSymbolValid = true;
+						loopOperaterSelector = false;
+						// breaking out of the loop if we have a matching operator
+						break;
+					}
+				}
+
+				if (operatorSymbolValid) // == true
 					break;
-				*/
+				else
+					PrintInvalidSelection();
+
 			}
 		}
 
@@ -121,7 +161,7 @@
 						break;
 
 					default:
-						PrintInvalidOperator();
+						PrintInvalidSelection();
 						break;
 				}
 			}
@@ -129,46 +169,9 @@
 			return;
 		}
 
-		// EC = Error correction
-		private static bool ParseIntEC(out int val)
+		public static void PrintInvalidSelection()
 		{
-			return int.TryParse(Console.ReadLine(), out val);
-		}
-
-		#region Operations
-		public static double SimpleAdd(double a, double b)
-		{
-			return a + b;
-		}
-
-		public static double SimpleSubtract(double a, double b)
-		{
-			return a - b;
-		}
-
-		public static double SimpleMultiply(double a, double b)
-		{
-			return a * b;
-		}
-
-		public static double SimpleDivide(double a, double b)
-		{
-			// divide by 0 safe-guard
-			if (a == 0 || b == 0)
-				return 0;
-			else
-				return a / b;
-		}
-
-		public static string FormatEquation(double a, double b, string operation, double result)
-		{
-			return $"{a} {operation} {b} = {result}";
-		}
-		#endregion
-
-		public static void PrintInvalidOperator()
-		{
-			Console.WriteLine("Please select a valid option");
+			Console.WriteLine("Invalid selection, please select a listed option.");
 		}
 
 		private static void PrintBlank()
