@@ -5,28 +5,47 @@
 		private static double valueA = -1;
 		private static double valueB = -1;
 
-		private static string stringOperator = "";
-		private static string[] operationSymbolArray;
-		private static bool enableSymbolLoop = true;
+		private static string[] validOperators = { "+", "-", "*", "/" };
+		//private static string[] splitOperator;
+		private static string selectedOperator = "";
+		private static bool loopOperaterSelector = true;
 
 		static void Main(string[] args)
 		{
 			Console.WriteLine("Number A:");
 			double.TryParse(Console.ReadLine(), out valueA);
 
-			while (enableSymbolLoop)
-			{
-				Console.WriteLine("Operation: ( + - * / )");
-				stringOperator = Console.ReadLine();
+			Console.WriteLine("Operation: ( + - * / )");
 
-				operationSymbolArray = stringOperator.Split(" ");
+			loopOperaterSelector = true;
+			while (loopOperaterSelector)
+			{
+				bool operatorSymbolValid = false;
+				// getting the first index in the split string from the console line,
+				// entries are determined by seperation via spaces
+				selectedOperator = Console.ReadLine().Split(" ")[0];
+				foreach (string op in validOperators)
+				{
+					if (selectedOperator == op)
+					{
+						operatorSymbolValid = true;
+						loopOperaterSelector = false;
+						// breaking out of the loop if we have a matching operator
+						break;
+					}
+				}
+
+				if (operatorSymbolValid) // == true
+					break;
+				else
+					PrintInvalidOperator();
+
 			}
 
 			Console.WriteLine("Number B:");
 			double.TryParse(Console.ReadLine(), out valueB);
 
-			PrintEquation(operationSymbolArray[0]);
-
+			PrintEquation(selectedOperator);
 		}
 
 		private static void PrintEquation(string val)
@@ -45,6 +64,14 @@
 					Console.WriteLine(SimpleMultiply(valueA, valueB));
 					break;
 
+				case "/": // divide
+					Console.WriteLine(SimpleDivide(valueA, valueB));
+					break;
+
+				default: // invalid symbols
+					PrintInvalidOperator();
+					break;
+				/*
 				case "x": // multiply
 					Console.WriteLine(SimpleMultiply(valueA, valueB));
 					break;
@@ -53,17 +80,10 @@
 					Console.WriteLine(SimpleMultiply(valueA, valueB));
 					break;
 
-				case "/": // divide
-					Console.WriteLine(SimpleDivide(valueA, valueB));
-					break;
-
 				case "÷": // divide
 					Console.WriteLine(SimpleDivide(valueA, valueB));
 					break;
-
-				default:
-					Console.WriteLine("Please enter a valid operation symbol");
-					break;
+				*/
 			}
 		}
 
@@ -92,6 +112,11 @@
 				return a / b;
 		}
 		#endregion
+
+		public static void PrintInvalidOperator()
+		{
+			Console.WriteLine("Please select a valid operation symbol");
+		}
 
 	}
 }
