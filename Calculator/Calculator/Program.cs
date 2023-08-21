@@ -62,19 +62,19 @@
 			switch (val)
 			{
 				case "+": // add
-					Console.WriteLine(SimpleAdd(valueA, valueB));
+					Console.WriteLine($"{FormatEquation(valueA, valueB, val, SimpleAdd(valueA, valueB))}");
 					break;
 
 				case "-": // subtract
-					Console.WriteLine(SimpleSubtract(valueA, valueB));
+					Console.WriteLine($"{FormatEquation(valueA, valueB, val, SimpleSubtract(valueA, valueB))}");
 					break;
 
 				case "*": // multiply
-					Console.WriteLine(SimpleMultiply(valueA, valueB));
+					Console.WriteLine($"{FormatEquation(valueA, valueB, val, SimpleMultiply(valueA, valueB))}");
 					break;
 
 				case "/": // divide
-					Console.WriteLine(SimpleDivide(valueA, valueB));
+					Console.WriteLine($"{FormatEquation(valueA, valueB, val, SimpleDivide(valueA, valueB))}");
 					break;
 
 				default: // invalid symbols
@@ -158,6 +158,11 @@
 				return 0;
 			else
 				return a / b;
+		}
+
+		public static string FormatEquation(double a, double b, string operation, double result)
+		{
+			return $"{a} {operation} {b} = {result}";
 		}
 		#endregion
 
