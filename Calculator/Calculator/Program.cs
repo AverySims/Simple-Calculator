@@ -4,48 +4,57 @@
 	{
 		private static double valueA = -1;
 		private static double valueB = -1;
+		
+		private static int valueC = -1;
 
 		private static string[] validOperators = { "+", "-", "*", "/" };
-		//private static string[] splitOperator;
 		private static string selectedOperator = "";
+
+		private static bool loopMain = true;
 		private static bool loopOperaterSelector = true;
+		private static bool LoopEndingSelector = true;
 
 		static void Main(string[] args)
 		{
-			Console.WriteLine("Number A:");
-			double.TryParse(Console.ReadLine(), out valueA);
-
-			Console.WriteLine("Operation: ( + - * / )");
-
-			loopOperaterSelector = true;
-			while (loopOperaterSelector)
+			while (loopMain)
 			{
-				bool operatorSymbolValid = false;
-				// getting the first index in the split string from the console line,
-				// entries are determined by seperation via spaces
-				selectedOperator = Console.ReadLine().Split(" ")[0];
-				foreach (string op in validOperators)
+				Console.WriteLine("Number A:");
+				double.TryParse(Console.ReadLine(), out valueA);
+
+				Console.WriteLine("Operation: + - * /");
+
+				loopOperaterSelector = true;
+				while (loopOperaterSelector)
 				{
-					if (selectedOperator == op)
+					bool operatorSymbolValid = false;
+					// getting the first index in the split string from the console line,
+					// entries are determined by seperation via spaces
+					selectedOperator = Console.ReadLine().Split(" ")[0];
+					foreach (string op in validOperators)
 					{
-						operatorSymbolValid = true;
-						loopOperaterSelector = false;
-						// breaking out of the loop if we have a matching operator
-						break;
+						if (selectedOperator == op)
+						{
+							operatorSymbolValid = true;
+							loopOperaterSelector = false;
+							// breaking out of the loop if we have a matching operator
+							break;
+						}
 					}
+
+					if (operatorSymbolValid) // == true
+						break;
+					else
+						PrintInvalidOperator();
+
 				}
 
-				if (operatorSymbolValid) // == true
-					break;
-				else
-					PrintInvalidOperator();
+				Console.WriteLine("Number B:");
+				double.TryParse(Console.ReadLine(), out valueB);
 
+				PrintEquation(selectedOperator);
+
+				SelectEndingPath();
 			}
-
-			Console.WriteLine("Number B:");
-			double.TryParse(Console.ReadLine(), out valueB);
-
-			PrintEquation(selectedOperator);
 		}
 
 		private static void PrintEquation(string val)
@@ -87,6 +96,45 @@
 			}
 		}
 
+		private static void SelectEndingPath()
+		{
+			// reset loop state before entering loop
+			LoopEndingSelector = true;
+			Console.WriteLine("Choose what happens next:");
+			PrintBlank();
+
+			Console.WriteLine("1. Calculate new equation");
+			Console.WriteLine("2. Quit program");
+
+			while (LoopEndingSelector)
+			{
+				ParseIntEC(out valueC);
+				switch (valueC)
+				{
+					case 1:
+						LoopEndingSelector = false;
+						break;
+
+					case 2:
+						LoopEndingSelector = false;
+						loopMain = false;
+						break;
+
+					default:
+						PrintInvalidOperator();
+						break;
+				}
+			}
+			PrintBlank();
+			return;
+		}
+
+		// EC = Error correction
+		private static bool ParseIntEC(out int val)
+		{
+			return int.TryParse(Console.ReadLine(), out val);
+		}
+
 		#region Operations
 		public static double SimpleAdd(double a, double b)
 		{
@@ -115,7 +163,12 @@
 
 		public static void PrintInvalidOperator()
 		{
-			Console.WriteLine("Please select a valid operation symbol");
+			Console.WriteLine("Please select a valid option");
+		}
+
+		private static void PrintBlank()
+		{
+			Console.WriteLine("");
 		}
 
 	}
