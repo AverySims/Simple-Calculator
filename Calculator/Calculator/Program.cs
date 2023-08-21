@@ -5,14 +5,15 @@
 		private static double valueA = -1;
 		private static double valueB = -1;
 		
-		private static int valueC = -1;
+		// program ending selection
+		private static int userEndVal = -1;
 
-		private static string[] validOperators = { "+", "-", "*", "/" };
+		private static readonly string[] validOperators = { "+", "-", "*", "/" };
 		private static string selectedOperator = "";
 
 		private static bool loopMain = true;
 		private static bool loopOperaterSelector = true;
-		private static bool LoopEndingSelector = true;
+		private static bool loopEndingSelector = true;
 
 		static void Main(string[] args)
 		{
@@ -139,24 +140,24 @@
 		private static void SelectEndingPath()
 		{
 			// reset loop state before entering loop
-			LoopEndingSelector = true;
+			loopEndingSelector = true;
 			Console.WriteLine("Choose what happens next:");
 			PrintBlank();
 
 			Console.WriteLine("1. Calculate new equation");
 			Console.WriteLine("2. Quit program");
 
-			while (LoopEndingSelector)
+			while (loopEndingSelector)
 			{
-				ParseIntEC(out valueC);
-				switch (valueC)
+				ParseIntEC(out userEndVal);
+				switch (userEndVal)
 				{
 					case 1:
-						LoopEndingSelector = false;
+						loopEndingSelector = false;
 						break;
 
 					case 2:
-						LoopEndingSelector = false;
+						loopEndingSelector = false;
 						loopMain = false;
 						break;
 
@@ -178,9 +179,5 @@
 		{
 			Console.WriteLine("");
 		}
-
 	}
 }
-
-
-
