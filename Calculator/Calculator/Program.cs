@@ -2,41 +2,32 @@
 {
 	internal class Program
 	{
-		private static double valueA = -1;
-		private static double valueB = -1;
-		
-		// program ending selection
-		private static int userEndVal = -1;
+		private static double valueA = 0;
+		private static double valueB = 0;
 
-		private static readonly string[] validOperators = { "+", "-", "*", "/" };
-		private static string selectedOperator = "";
+		private static readonly string[] operationTypes = { "+", "-", "*", "/" };
+		private static string userOperationValue = "";
 
 		private static bool loopMain = true;
-		private static bool loopOperaterSelector = true;
-		private static bool loopEndingSelector = true;
+		private static bool loopOperationSelector = true;
 
 		static void Main(string[] args)
 		{
 			while (loopMain)
 			{
-				Console.WriteLine("Number A:");
-				double.TryParse(Console.ReadLine(), out valueA);
-
-				Console.WriteLine("Operation: + - * /");
+				SelectNumberA();
 				
-				// selecting + - * /
-				SelectOperator();
+				SelectOperator(); // selecting +, -, *, or /
 
-				Console.WriteLine("Number B:");
-				double.TryParse(Console.ReadLine(), out valueB);
+				SelectNumberB();
 
-				PrintBlank(); // empty line before
+				SimpleConsoleFunctions.PrintBlank(); // empty line before
 				
-				PrintEquation(selectedOperator);
-				
-				PrintBlank(); // empty line after
+				PrintEquation(userOperationValue);
 
-				SelectEndingPath();
+				SimpleConsoleFunctions.PrintBlank(); // empty line after
+
+				SimpleConsoleFunctions.SelectEndingAction(out loopMain);
 			}
 		}
 
@@ -67,19 +58,9 @@
 					break;
 
 				default: // invalid symbols
-					PrintInvalidSelection();
+					SimpleConsoleFunctions.PrintInvalidSelection();
 					break;
-
 			}
-		}
-
-		#endregion
-
-		#region Parsing
-		// EC = Error correction
-		private static bool ParseIntEC(out int val)
-		{
-			return int.TryParse(Console.ReadLine(), out val);
 		}
 		#endregion
 
@@ -109,75 +90,77 @@
 		}
 		#endregion
 
+		private static void SelectNumberA()
+		{
+			bool tempLoop = true;
+
+			Console.WriteLine("Number A:");
+			while (tempLoop)
+			{
+				if (SimpleConsoleFunctions.ParseDoubleEC(out valueA))
+				{
+					tempLoop = false;
+				}
+				else
+				{
+					Console.WriteLine("Please enter a valid number");
+				}
+			}
+		}
+
+		private static void SelectNumberB()
+		{
+			bool tempLoop = true;
+
+			Console.WriteLine("Number B:");
+			while (tempLoop)
+			{
+				if (SimpleConsoleFunctions.ParseDoubleEC(out valueB))
+				{
+					tempLoop = false;
+				}
+				else
+				{
+					Console.WriteLine("Please enter a valid number");
+				}
+			}
+		}
+
 		private static void SelectOperator()
 		{
-			loopOperaterSelector = true;
-			while (loopOperaterSelector)
+			loopOperationSelector = true;
+
+			Console.WriteLine("Operation: + - * /");
+			while (loopOperationSelector)
 			{
 				bool operatorSymbolValid = false;
 				// getting the first index in the split string from the console line,
 				// entries are determined by seperation via spaces
-				selectedOperator = Console.ReadLine().Split(" ")[0];
-				foreach (string op in validOperators)
+				userOperationValue = Console.ReadLine().Split(" ")[0];
+				foreach (string op in operationTypes)
 				{
-					if (selectedOperator == op)
+					if (userOperationValue == op)
 					{
 						operatorSymbolValid = true;
-						loopOperaterSelector = false;
+						loopOperationSelector = false;
 						// breaking out of the loop if we have a matching operator
 						break;
 					}
 				}
 
 				if (operatorSymbolValid) // == true
-					break;
-				else
-					PrintInvalidSelection();
-
-			}
-		}
-
-		private static void SelectEndingPath()
-		{
-			// reset loop state before entering loop
-			loopEndingSelector = true;
-			Console.WriteLine("Choose what happens next:");
-			PrintBlank();
-
-			Console.WriteLine("1. Calculate new equation");
-			Console.WriteLine("2. Quit program");
-
-			while (loopEndingSelector)
-			{
-				ParseIntEC(out userEndVal);
-				switch (userEndVal)
 				{
-					case 1:
-						loopEndingSelector = false;
-						break;
-
-					case 2:
-						loopEndingSelector = false;
-						loopMain = false;
-						break;
-
-					default:
-						PrintInvalidSelection();
-						break;
+					break;
 				}
+				else
+				{
+					SimpleConsoleFunctions.PrintInvalidSelection();
+				}
+
 			}
-			PrintBlank();
-			return;
+
 		}
 
-		public static void PrintInvalidSelection()
-		{
-			Console.WriteLine("Invalid selection, please select a listed option.");
-		}
-
-		private static void PrintBlank()
-		{
-			Console.WriteLine("");
-		}
 	}
+
 }
