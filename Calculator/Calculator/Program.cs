@@ -16,15 +16,11 @@
 			while (loopMain)
 			{
 				SelectNumberA();
-				
 				SelectOperator(); // selecting +, -, *, or /
-
 				SelectNumberB();
 
 				SimpleConsoleFunctions.PrintBlank(); // empty line before
-				
 				PrintEquation(userOperationValue);
-
 				SimpleConsoleFunctions.PrintBlank(); // empty line after
 
 				SimpleConsoleFunctions.SelectEndingAction(out loopMain);
@@ -82,11 +78,17 @@
 
 		public static double SimpleDivide(double a, double b)
 		{
+#if true
 			// divide by 0 safe-guard
+			// returns 0 when divided by 0
 			if (a == 0 || b == 0)
 				return 0;
 			else
 				return a / b;
+#else
+			// returns infinity when divided by 0
+			return a / b;
+#endif
 		}
 		#endregion
 
